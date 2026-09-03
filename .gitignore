@@ -1,0 +1,33 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Tests / caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local test data
+test_data/
+
+# Generated photos
+output/
+*_geotagged/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
