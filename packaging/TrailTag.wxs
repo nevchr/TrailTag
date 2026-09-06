@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+      Name="TrailTag"
+      Manufacturer="TrailTag"
+      Version="$(var.AppVersion)"
+      Language="1033"
+      Scope="perUserOrMachine"
+      UpgradeCode="2D596625-7AE8-4541-A7F2-21C286129C62">
+
+    <MajorUpgrade
+        DowngradeErrorMessage="A newer version of TrailTag is already installed." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="mszip" />
+    <Launch Condition="VersionNT64" Message="TrailTag requires 64-bit Windows." />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="TrailTag" />
+    </StandardDirectory>
+
+    <Files Include="$(var.SourceDir)\**" Directory="INSTALLFOLDER">
+      <Exclude Files="$(var.SourceDir)\TrailTag.exe" />
+    </Files>
+
+    <Component Id="MainExecutable" Directory="INSTALLFOLDER">
+      <File
+          Id="TrailTagExecutable"
+          Source="$(var.SourceDir)\TrailTag.exe"
+          KeyPath="yes">
+        <Shortcut
+            Id="TrailTagStartMenuShortcut"
+            Directory="ProgramMenuFolder"
+            Advertise="yes"
+            Icon="TrailTag.exe"
+            IconIndex="0"
+            Name="TrailTag"
+            Description="Geotag photos from a GPX route"
+            WorkingDirectory="INSTALLFOLDER">
+          <ShortcutProperty Key="System.AppUserModel.ID" Value="TrailTag.Desktop" />
+        </Shortcut>
+      </File>
+    </Component>
+
+    <Icon
+        Id="TrailTag.exe"
+        SourceFile="$(var.SourceDir)\TrailTag.exe" />
+    <Property Id="ARPPRODUCTICON" Value="TrailTag.exe" />
+    <Property Id="ARPCOMMENTS" Value="Geotag photos from a recorded GPX route." />
+    <UIRef Id="TrailTagUI" />
+  </Package>
+</Wix>

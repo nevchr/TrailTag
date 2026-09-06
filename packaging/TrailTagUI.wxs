@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <UI Id="TrailTagUI">
+      <TextStyle Id="TrailTagFont" FaceName="Segoe UI" Size="9" />
+      <TextStyle Id="TrailTagHeading" FaceName="Segoe UI" Size="16" Bold="yes" Red="23" Green="107" Blue="77" />
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Segoe UI" Size="9" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Segoe UI" Size="10" Bold="yes" />
+      <Property Id="DefaultUIFont" Value="TrailTagFont" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <UIRef Id="WixUI_Common" />
+
+      <Dialog Id="TrailTagWelcome" Width="370" Height="235" Title="TrailTag Setup">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" Text="{\TrailTagHeading}Welcome to TrailTag" />
+        <Control Id="Intro" Type="Text" X="22" Y="67" Width="320" Height="36" Text="Give your photos a place on the map. This will install TrailTag [ProductVersion] on this computer." />
+        <Control Id="Location" Type="Text" X="22" Y="116" Width="320" Height="35" Text="TrailTag will be available from the Start menu. Your photos and saved trips are kept separately from the app." />
+        <Control Id="Line" Type="Line" X="0" Y="187" Width="370" Height="1" />
+        <Control Id="Install" Type="PushButton" X="204" Y="203" Width="70" Height="20" Default="yes" Text="&amp;Install">
+          <Publish Event="EndDialog" Value="Return" />
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="283" Y="203" Width="65" Height="20" Cancel="yes" Text="Cancel">
+          <Publish Event="EndDialog" Value="Exit" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="TrailTagMaintenance" Width="370" Height="235" Title="TrailTag Setup">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" Text="{\TrailTagHeading}Manage TrailTag" />
+        <Control Id="Intro" Type="Text" X="22" Y="65" Width="320" Height="30" Text="Repair the app files or remove TrailTag from this computer. Your saved trips and photos will be kept." />
+        <Control Id="Repair" Type="PushButton" X="22" Y="117" Width="140" Height="25" Default="yes" Text="&amp;Repair TrailTag">
+          <Publish Property="REINSTALL" Value="ALL" Order="1" />
+          <Publish Property="REINSTALLMODE" Value="amus" Order="2" />
+          <Publish Event="EndDialog" Value="Return" Order="3" />
+        </Control>
+        <Control Id="Remove" Type="PushButton" X="190" Y="117" Width="140" Height="25" Text="&amp;Uninstall TrailTag">
+          <Publish Property="REMOVE" Value="ALL" Order="1" />
+          <Publish Event="EndDialog" Value="Return" Order="2" />
+        </Control>
+        <Control Id="Line" Type="Line" X="0" Y="187" Width="370" Height="1" />
+        <Control Id="Cancel" Type="PushButton" X="283" Y="203" Width="65" Height="20" Cancel="yes" Text="Cancel">
+          <Publish Event="EndDialog" Value="Exit" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="TrailTagProgress" Width="370" Height="235" Title="TrailTag Setup" Modeless="yes">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" TabSkip="no" Text="{\TrailTagHeading}Setting up TrailTag" />
+        <Control Id="Intro" Type="Text" X="22" Y="68" Width="320" Height="30" Text="Please wait while Windows updates the app files. This may take a few minutes." />
+        <Control Id="Progress" Type="ProgressBar" X="22" Y="120" Width="326" Height="15" ProgressBlocks="yes">
+          <Subscribe Event="SetProgress" Attribute="Progress" />
+        </Control>
+        <Control Id="Action" Type="Text" X="22" Y="147" Width="326" Height="30">
+          <Subscribe Event="ActionText" Attribute="Text" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="TrailTagComplete" Width="370" Height="235" Title="TrailTag Setup">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" Text="{\TrailTagHeading}Setup complete" />
+        <Control Id="Intro" Type="Text" X="22" Y="72" Width="320" Height="70" HideCondition="REMOVE = &quot;ALL&quot;" Text="TrailTag was installed successfully. Open TrailTag from the Windows Start menu to get started." />
+        <Control Id="Removed" Type="Text" X="22" Y="72" Width="320" Height="70" Hidden="yes" ShowCondition="REMOVE = &quot;ALL&quot;" Text="TrailTag has been removed. Your saved trips and photos have been kept." />
+        <Control Id="Line" Type="Line" X="0" Y="187" Width="370" Height="1" />
+        <Control Id="Finish" Type="PushButton" X="278" Y="203" Width="70" Height="20" Default="yes" Cancel="yes" Text="&amp;Finish">
+          <Publish Event="EndDialog" Value="Return" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="TrailTagCancelled" Width="370" Height="235" Title="TrailTag Setup">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" Text="{\TrailTagHeading}Setup cancelled" />
+        <Control Id="Intro" Type="Text" X="22" Y="72" Width="320" Height="70" Text="Setup did not finish. You can run this installer again whenever you are ready." />
+        <Control Id="Finish" Type="PushButton" X="278" Y="203" Width="70" Height="20" Default="yes" Cancel="yes" Text="&amp;Close">
+          <Publish Event="EndDialog" Value="Return" />
+        </Control>
+      </Dialog>
+
+      <Dialog Id="TrailTagFailure" Width="370" Height="235" Title="TrailTag Setup">
+        <Control Id="Title" Type="Text" X="22" Y="22" Width="325" Height="30" Transparent="yes" Text="{\TrailTagHeading}Setup could not finish" />
+        <Control Id="Intro" Type="Text" X="22" Y="72" Width="320" Height="70" Text="Windows could not finish setting up TrailTag. Close the app if it is running, then try the installer again." />
+        <Control Id="Finish" Type="PushButton" X="278" Y="203" Width="70" Height="20" Default="yes" Cancel="yes" Text="&amp;Close">
+          <Publish Event="EndDialog" Value="Return" />
+        </Control>
+      </Dialog>
+
+      <InstallUISequence>
+        <Show Dialog="TrailTagWelcome" Before="TrailTagProgress" Condition="NOT Installed" />
+        <Show Dialog="TrailTagMaintenance" Before="TrailTagProgress" Condition="Installed AND NOT (REMOVE OR REINSTALL)" />
+        <Show Dialog="TrailTagProgress" Before="ExecuteAction" />
+        <Show Dialog="TrailTagComplete" OnExit="success" />
+        <Show Dialog="TrailTagCancelled" OnExit="cancel" />
+        <Show Dialog="TrailTagFailure" OnExit="error" />
+      </InstallUISequence>
+      <AdminUISequence>
+        <Show Dialog="TrailTagProgress" Before="ExecuteAction" />
+        <Show Dialog="TrailTagComplete" OnExit="success" />
+        <Show Dialog="TrailTagCancelled" OnExit="cancel" />
+        <Show Dialog="TrailTagFailure" OnExit="error" />
+      </AdminUISequence>
+    </UI>
+  </Fragment>
+</Wix>
